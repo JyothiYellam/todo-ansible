@@ -2,6 +2,9 @@
 - name: Install Nginx
   hosts: frontend
   become: true
+
+  vars:
+    backend_public_ip: "{{ hostvars[groups['backend'][0]]['public_ip_address'] }}"
     
   tasks:
     - name: Install NGINX
@@ -23,6 +26,11 @@
       ansible.builtin.copy:
         src: ../../todo/frontend/
         dest: /usr/share/nginx/html/
+
+    - name: Configure backend API URL
+      ansible.builtin.template:
+        src: templates/config.js.j2
+        dest: /usr/share/nginx/html/config.js
     
     - name: start the nginx
       ansible.builtin.service:
