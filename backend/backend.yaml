@@ -15,7 +15,7 @@
 
     - name: copying the backend application code
       ansible.builtin.copy:
-        src: ../todo/backend/
+        src: ../../todo/backend/
         dest: /home/ec2-user/todo-ansible/backend/
 
     - name: Installing dependencies
