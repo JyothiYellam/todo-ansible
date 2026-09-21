@@ -21,7 +21,7 @@
 
     - name: copying all frontend files      
       ansible.builtin.copy:
-        src: ../todo/frontend/
+        src: ../../todo/frontend/
         dest: /usr/share/nginx/html/
     
     - name: start the nginx
