@@ -1,0 +1,10 @@
+[Unit]
+Description=Todo Backend Service
+
+[Service]
+User=ec2-user
+ExecStart=/usr/bin/node /home/ec2-user/todo-ansible/backend/server.js
+SyslogIdentifier=todo-backend
+
+[Install]
+WantedBy=multi-user.target

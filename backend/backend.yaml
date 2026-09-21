@@ -1,0 +1,48 @@
+---
+
+- name: Node.js
+  hosts: backend
+  become: true
+
+  vars:
+    db_private_ip: "{{ groups['database'][0] }}"
+
+  tasks:
+    - name: Node.js Installation
+      ansible.builtin.dnf:
+        name: nodejs
+        state: present
+
+    - name: copying the backend application code
+      ansible.builtin.copy:
+        src: ../todo/backend/
+        dest: /home/ec2-user/todo-ansible/backend/
+
+    - name: Installing dependencies
+      ansible.builtin.shell:
+        cmd: npm install
+        chdir: /home/ec2-user/todo-ansible/backend/
+
+    - name: configuring backend
+      ansible.builtin.template:
+        src: templates/config.js.j2
+        dest: /home/ec2-user/todo-ansible/backend/config.js
+    
+    - name: Copy backend service file
+      ansible.builtin.template:
+        src: templates/todo-backend.service.j2
+        dest: /etc/systemd/system/todo-backend.service
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: enabling and starting  the service
+      ansible.builtin.service:
+         name: todo-backend
+         state: started
+         enabled: true
+    
+    
+
+      

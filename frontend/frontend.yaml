@@ -1,0 +1,33 @@
+---
+- name: Install Nginx
+  hosts: frontend
+  become: true
+    
+  tasks:
+    - name: Install NGINX
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Enable Nginx
+      ansible.builtin.service:   
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: removing default files
+      ansible.builtin.shell:
+        cmd: rm -rf /usr/share/nginx/html/*
+
+    - name: copying all frontend files      
+      ansible.builtin.copy:
+        src: ../todo/frontend/
+        dest: /usr/share/nginx/html/
+    
+    - name: start the nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+---
+   
+      
